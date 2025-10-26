@@ -3,514 +3,279 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Calculadora GP — Tema Escuro (Apenas Teclado)</title>
+<title>Calculadora Grupo Mega — (Apenas Teclado)</title>
 <style>
-  /* CSS AJUSTADO */
   :root{
-    /* Cores para Tema Escuro */
-    --bg: #1e1e2d; /* Fundo principal */
-    --card: #27293d; /* Fundo dos elementos/cards */
-    --muted: #a0aec0; /* Texto secundário */
-    --text: #ffffff; /* Texto principal */
-    --accent: #00a86b; /* Destaque primário (verde vibrante) */
-    --accent-2: #6b46c1; /* Destaque secundário (roxo) */
-    --danger: #e35b5b; /* Perigo/Clear */
-    --shadow: 0 4px 12px rgba(0,0,0,0.4);
-    --glass: linear-gradient(180deg, rgba(39,41,61,0.95), rgba(45,47,70,0.95)); /* Fundo com leve transparência */
+    --bg:#1e1e2d;
+    --card:#27293d;
+    --muted:#a0aec0;
+    --text:#ffffff;
+    --accent:#00a86b;
+    --accent-2:#6b46c1;
+    --danger:#e35b5b;
+    --shadow:0 4px 12px rgba(0,0,0,0.4);
+    --glass:linear-gradient(180deg,rgba(39,41,61,0.95),rgba(45,47,70,0.95));
   }
-
-  *{box-sizing:border-box;font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif}
+  *{box-sizing:border-box;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif}
   body{
-    margin:0;
-    min-height:100vh;
+    margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,var(--bg),#19192a);color:var(--text);padding:24px;
+  }
+  .container{
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     justify-content:center;
-    background:linear-gradient(180deg, var(--bg), #19192a);
-    color:var(--text);
-    padding:24px;
-  }
-
-  .app{
+    gap:20px;
     width:100%;
-    max-width:900px; /* Reduzindo max-width já que o keypad foi removido */
-    background:var(--card);
-    border-radius:12px;
-    box-shadow:var(--shadow);
-    display:grid;
-    /* Ajustando o grid: Left (histórico) e Right (entrada/contas) terão 1fr */
-    grid-template-columns: 1fr 1fr;
-    gap:18px;
-    padding:18px;
-    border: 1px solid rgba(255,255,255,0.05);
+    max-width:1100px;
   }
-
-  /* Header */
-  .header{
-    grid-column: 1 / -1;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:4px;
-  }
-  .title{font-weight:700; color:var(--text)}
-  .subtitle{color:var(--muted); font-size:13px}
-
-  /* Left: histórico */
-  .left{
-    padding:12px;
-    border-radius:10px;
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,0.06);
-    /* Removendo estilos desnecessários que eram para o keypad */
-  }
-
-  .history-wrap{
-    display:flex;
-    gap:12px;
-  }
-
-  /* Fazendo o histórico preencher todo o espaço na coluna left */
-  .history{
+  .app{
     flex:1;
-    min-height:400px; /* Aumentando a altura mínima */
-    background:rgba(0,0,0,0.2);
-    border-radius:8px;
-    padding:12px;
-    border:1px solid rgba(255,255,255,0.08);
-    overflow:auto;
-    box-shadow:0 2px 8px rgba(0,0,0,0.2);
-  }
-  .history h4{margin:0 0 8px 0; font-size:13px; color:var(--muted)}
-  .hist-item{
-    padding:8px;
-    border-radius:6px;
-    margin-bottom:8px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.03);
-    font-size:14px;
-  }
-  .hist-small{display:block;font-size:12px;color:var(--muted); margin-top:4px}
-
-  /* Right: entrada e totais */
-  .right{
-    padding:12px;
-    border-radius:10px;
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,0.06);
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-
-  .input-area{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-
-  .label-row{display:flex; justify-content:space-between; align-items:center}
-  .label-row .hint{font-size:13px; color:var(--muted)}
-
-  input#entrada{
-    height:80px;
-    font-size:32px;
-    padding:12px;
-    border-radius:8px;
-    border:1px solid rgba(255,255,255,0.1);
-    background:rgba(0,0,0,0.3);
-    color:var(--text);
-    outline:none;
-    text-align:right;
-    box-shadow:inset 0 1px 3px rgba(0,0,0,0.4);
-  }
-
-  /* sections Dinheiro / Crédito / Débito */
-  .accounts{display:flex; flex-direction:column; gap:10px}
-  .acc{
-    display:grid;
-    grid-template-columns: 68px 1fr;
-    gap:10px;
-    align-items:center;
-    padding:10px;
-    border-radius:8px;
-    background: var(--card);
+    background:var(--card);border-radius:12px;
+    box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px;
     border:1px solid rgba(255,255,255,0.05);
   }
-  .acc .key-btn{
-    height:40px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:6px;
-    border:1px solid rgba(255,255,255,0.1);
-    cursor:pointer;
-    background:rgba(0,0,0,0.3);
-    font-weight:700;
-    color:var(--muted);
+  .header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .title{font-weight:700;}
+  .subtitle{color:var(--muted);font-size:13px}
+  .left,.right{padding:12px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.06);}
+  .history{min-height:400px;background:rgba(0,0,0,0.2);border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,0.08);
+    overflow:auto;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+  .hist-item{padding:8px;border-radius:6px;margin-bottom:8px;background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.03);font-size:14px;}
+  .hist-small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+  .hist-result{color:var(--accent);font-weight:700;margin-left:4px;}
+  input#entrada{
+    height:80px;font-size:32px;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
+    background:rgba(0,0,0,0.3);color:var(--text);outline:none;text-align:right;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.4);
   }
-  .acc .key-btn.active{
-    background:linear-gradient(180deg,var(--accent), #008f5a);
-    color:white;
-    border:none;
+  .acc{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:center;padding:10px;border-radius:8px;
+    background:var(--card);border:1px solid rgba(255,255,255,0.05);}
+  .key-btn{height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;
+    border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);font-weight:700;color:var(--muted);}
+  .key-btn.active{background:linear-gradient(180deg,var(--accent),#008f5a);color:white;border:none;}
+  .tag{font-size:13px;color:var(--muted);}
+  .amount{font-size:24px;font-weight:700;margin-top:4px;color:var(--accent);}
+  .small-btn{padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);
+    background:rgba(0,0,0,0.3);cursor:pointer;font-size:13px;color:var(--muted);}
+  .small-btn:hover{background:rgba(0,0,0,0.5);}
+  input[type="checkbox"]{accent-color:var(--accent);}
+  @media(max-width:950px){
+    .container{flex-direction:column;align-items:center;}
+    .shortcut-box{position:relative;max-width:100%;right:0;}
+    .app{grid-template-columns:1fr;padding:12px;}
   }
-  .acc .tag{font-size:13px; color:var(--muted);}
-  .acc .amount{font-size:24px; font-weight:700; margin-top:4px; color:var(--accent);}
-  .acc .controls{display:flex; gap:8px; align-items:center; margin-top:6px}
-  .small-btn{
-    padding:6px 8px;
-    border-radius:6px;
-    border:1px solid rgba(255,255,255,0.1);
-    background:rgba(0,0,0,0.3);
-    cursor:pointer;
+
+  /* ======= AJUDA VISUAL ======= */
+  .shortcut-box{
+    width:230px;
+    background:rgba(39,41,61,0.95);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:14px 16px;
+    border-radius:10px;
     font-size:13px;
     color:var(--muted);
+    box-shadow:var(--shadow);
+    line-height:1.6;
+    height:fit-content;
   }
-  .small-btn:hover{background:rgba(0,0,0,0.5);}
-
-  .footer-row{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:6px}
-  .muted-note{font-size:13px; color:var(--muted)}
-
-  input[type="checkbox"]{
-    accent-color: var(--accent);
+  .shortcut-box h4{
+    margin:0 0 8px 0;
+    color:var(--text);
+    font-size:15px;
+    font-weight:700;
+    text-align:center;
   }
-
-  /* responsivo */
-  @media (max-width:800px){ /* Ajustando breakpoint para telas menores */
-    .app{grid-template-columns:1fr; padding:12px}
+  .shortcut-box kbd{
+    background:rgba(255,255,255,0.1);
+    border-radius:4px;
+    padding:2px 5px;
+    font-size:12px;
+    color:var(--accent);
+    margin-right:4px;
+  }
+  hr{
+    border:none;
+    border-top:1px solid rgba(255,255,255,0.1);
+    margin:6px 0;
   }
 </style>
 </head>
 <body>
-  <div class="app" id="app">
+<div class="container">
+  <div class="app">
     <div class="header">
       <div>
-        <div class="title">Calculadora GP — Tema Escuro 🌒</div>
-        <div class="subtitle">Focada no Teclado: Enter = adicionar • F5/F6/F7 selecionam • Esc limpa</div>
+        <div class="title">Calculadora Grupo Mega</div>
+        <div class="subtitle">Apenas teclado físico — Enter adiciona</div>
       </div>
-      <div class="subtitle">By LucasC. • Versão 3.1</div>
+      <div class="subtitle">Versão 3.4 • by LucasC.</div>
     </div>
 
     <div class="left">
-      <div class="history-wrap">
-        <div class="history" id="history">
-          <h4>Histórico</h4>
-          <div id="histList"></div>
-        </div>
+      <div class="history"><h4>Histórico</h4><div id="histList"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+        <div class="subtitle">Operação via teclado</div>
+        <button class="small-btn" id="clearHistBtn">Limpar histórico</button>
       </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
-        <div class="muted-note">Operação via teclado físico.</div>
-        <div style="display:flex; gap:8px;">
-          <button class="small-btn" id="clearHistBtn">Limpar histórico</button>
-        </div>
-      </div>
-      </div>
+    </div>
 
     <div class="right">
-      <div class="input-area">
-        <div class="label-row">
-          <div class="hint">Digite valor | Pressione Enter para adicionar ao tipo selecionado</div>
-          <div class="hint">Use F5 (Dinheiro), F6 (Crédito), F7 (Débito)</div>
-        </div>
-
-        <input id="entrada" placeholder="0,00" inputmode="decimal" />
-
-        <div class="footer-row">
-          <div style="display:flex; gap:8px;">
-            <button class="small-btn" id="btnAdd">Adicionar (Enter)</button>
-            <button class="small-btn" id="btnCalc">Calcular (sem adicionar)</button>
-          </div>
-          <div class="muted-note">Esc = limpar entrada • Backspace = apagar</div>
-        </div>
+      <input id="entrada" placeholder="0,00" inputmode="decimal" />
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="small-btn" id="btnAdd">Adicionar (Enter)</button>
+        <button class="small-btn" id="btnCalc">Calcular (Ctrl+Enter)</button>
       </div>
 
-      <div class="accounts">
-        <div class="acc" id="acc-din">
-          <div>
-            <div class="key-btn" id="btnF5">F5</div>
-          </div>
-          <div class="info">
-            <div class="tag">Dinheiro</div>
-            <div class="amount" id="amtDin">R$ 0,00</div>
-            <div class="controls"><input type="checkbox" id="chkDin" /> <label for="chkDin" style="color:var(--muted); font-size:13px; margin-left:6px">Selecionar</label>
-              <button class="small-btn" data-clear="din">Limpar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="acc" id="acc-cred">
-          <div>
-            <div class="key-btn" id="btnF6">F6</div>
-          </div>
-          <div class="info">
-            <div class="tag">Crédito</div>
-            <div class="amount" id="amtCred">R$ 0,00</div>
-            <div class="controls"><input type="checkbox" id="chkCred" /> <label for="chkCred" style="color:var(--muted); font-size:13px; margin-left:6px">Selecionar</label>
-              <button class="small-btn" data-clear="cred">Limpar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="acc" id="acc-deb">
-          <div>
-            <div class="key-btn" id="btnF7">F7</div>
-          </div>
-          <div class="info">
-            <div class="tag">Débito</div>
-            <div class="amount" id="amtDeb">R$ 0,00</div>
-            <div class="controls"><input type="checkbox" id="chkDeb" /> <label for="chkDeb" style="color:var(--muted); font-size:13px; margin-left:6px">Selecionar</label>
-              <button class="small-btn" data-clear="deb">Limpar</button>
-            </div>
+      <div class="acc">
+        <div><div class="key-btn" id="btnF2">F2</div></div>
+        <div class="info">
+          <div class="tag">Dinheiro</div><div class="amount" id="amtDin">R$ 0,00</div>
+          <div class="controls">
+            <input type="checkbox" id="chkDin"><label for="chkDin" style="margin-left:6px;">Selecionar</label>
+            <button class="small-btn" data-clear="din">Limpar</button>
           </div>
         </div>
       </div>
 
+      <div class="acc">
+        <div><div class="key-btn" id="btnF3">F3</div></div>
+        <div class="info">
+          <div class="tag">Crédito</div><div class="amount" id="amtCred">R$ 0,00</div>
+          <div class="controls">
+            <input type="checkbox" id="chkCred"><label for="chkCred" style="margin-left:6px;">Selecionar</label>
+            <button class="small-btn" data-clear="cred">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <div><div class="key-btn" id="btnF4">F4</div></div>
+        <div class="info">
+          <div class="tag">Débito</div><div class="amount" id="amtDeb">R$ 0,00</div>
+          <div class="controls">
+            <input type="checkbox" id="chkDeb"><label for="chkDeb" style="margin-left:6px;">Selecionar</label>
+            <button class="small-btn" data-clear="deb">Limpar</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Tabela lateral de atalhos -->
+  <div class="shortcut-box">
+    <h4>🧭 Atalhos do Teclado</h4>
+    <div><kbd>F2</kbd> Dinheiro • <kbd>F5</kbd> limpar</div>
+    <div><kbd>F3</kbd> Crédito • <kbd>F6</kbd> limpar</div>
+    <div><kbd>F4</kbd> Débito • <kbd>F7</kbd> limpar</div>
+    <hr>
+    <div><kbd>Enter</kbd> Adicionar</div>
+    <div><kbd>Ctrl+Enter</kbd> Calcular</div>
+    <div><kbd>Esc</kbd> Limpar entrada</div>
+    <div><kbd>Ctrl+L</kbd> Limpar histórico</div>
+  </div>
+</div>
+
 <script>
-/* ======= LÓGICA (AJUSTADA: Removendo eventos do keypad virtual) ======= */
-const entrada = document.getElementById('entrada');
-const histList = document.getElementById('histList');
-const clearHistBtn = document.getElementById('clearHistBtn');
+/* ======= LÓGICA ======= */
+const entrada=document.getElementById('entrada');
+const histList=document.getElementById('histList');
+const clearHistBtn=document.getElementById('clearHistBtn');
+const amtDin=document.getElementById('amtDin');
+const amtCred=document.getElementById('amtCred');
+const amtDeb=document.getElementById('amtDeb');
+const chkDin=document.getElementById('chkDin');
+const chkCred=document.getElementById('chkCred');
+const chkDeb=document.getElementById('chkDeb');
+const btnF2=document.getElementById('btnF2');
+const btnF3=document.getElementById('btnF3');
+const btnF4=document.getElementById('btnF4');
+let totals={din:0,cred:0,deb:0};
+let history=[];
+let selected=null;
 
-const amtDin = document.getElementById('amtDin');
-const amtCred = document.getElementById('amtCred');
-const amtDeb = document.getElementById('amtDeb');
-
-const chkDin = document.getElementById('chkDin');
-const chkCred = document.getElementById('chkCred');
-const chkDeb = document.getElementById('chkDeb');
-
-const btnF5 = document.getElementById('btnF5');
-const btnF6 = document.getElementById('btnF6');
-const btnF7 = document.getElementById('btnF7');
-
-let totals = { din: 0, cred: 0, deb: 0 };
-let history = [];
-let selected = null; // 'din' | 'cred' | 'deb' | null
-
-/* util: formata número para moeda pt-BR */
-function formatMoney(n){
-  if (isNaN(n) || n === null) n = 0;
-  return n.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
-}
-
-/* atualiza UI dos totais e seleção */
+function formatMoney(n){if(isNaN(n)||n===null)n=0;return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
 function updateTotalsUI(){
-  amtDin.textContent = formatMoney(totals.din);
-  amtCred.textContent = formatMoney(totals.cred);
-  amtDeb.textContent = formatMoney(totals.deb);
-
-  // checkboxes reflect selected
-  chkDin.checked = selected === 'din';
-  chkCred.checked = selected === 'cred';
-  chkDeb.checked = selected === 'deb';
-
-  btnF5.classList.toggle('active', selected === 'din');
-  btnF6.classList.toggle('active', selected === 'cred');
-  btnF7.classList.toggle('active', selected === 'deb');
+  amtDin.textContent=formatMoney(totals.din);
+  amtCred.textContent=formatMoney(totals.cred);
+  amtDeb.textContent=formatMoney(totals.deb);
+  chkDin.checked=selected==='din';chkCred.checked=selected==='cred';chkDeb.checked=selected==='deb';
+  btnF2.classList.toggle('active',selected==='din');
+  btnF3.classList.toggle('active',selected==='cred');
+  btnF4.classList.toggle('active',selected==='deb');
 }
-
-/* adiciona item no histórico */
-function pushHistory(obj){
-  history.unshift(obj);
-  renderHistory();
-}
-
-/* render histórico */
+function pushHistory(o){history.unshift(o);renderHistory();}
 function renderHistory(){
-  histList.innerHTML = '';
-  if(history.length === 0){
-    histList.innerHTML = '<div class="hist-item">Nenhuma operação ainda.</div>';
-    return;
-  }
-  history.forEach(it => {
-    const div = document.createElement('div');
-    div.className = 'hist-item';
-    const label = it.typeLabel.toUpperCase();
-    div.innerHTML = `<strong>[${label.charAt(0)}]</strong> ${it.expr}<div class="hist-small">${it.note}</div>`;
-    histList.appendChild(div);
+  histList.innerHTML='';
+  if(!history.length){histList.innerHTML='<div class="hist-item">Nenhuma operação ainda.</div>';return;}
+  history.forEach(it=>{
+    const d=document.createElement('div');
+    d.className='hist-item';
+    const parts=it.expr.split('=');
+    const exp=parts[0].trim();const res=parts[1]?.trim()||'';
+    d.innerHTML=`<strong>[${it.typeLabel[0]}]</strong> ${exp} = <span class="hist-result">${res}</span><div class="hist-small">${it.note}</div>`;
+    histList.appendChild(d);
   });
 }
-
-/* processa expressão (entrada do usuário), retorna número */
 function evalExpression(expr){
-  if(!expr) return 0;
-  // normaliza: vírgula -> ponto, troca × ÷ se existirem
-  expr = expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.').trim();
-
-  // permitir apenas caracteres seguros: dígitos, operadores, parênteses, ponto, espaço e %
-  if(!/^[0-9+\-*/().%\s]*$/.test(expr)){
-    throw new Error('Expressão contém caracteres inválidos');
-  }
-
-  // trata porcentagem simples: converte "50%" em "(50/100)"
-  expr = expr.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
-
-  // eval com Function para evitar acesso a escopo local
-  // NOTA: mantemos validação acima; em apps reais usar parser matemático.
-  const fn = new Function('return ' + expr);
-  const value = fn();
-  if(typeof value !== 'number' || !isFinite(value)) throw new Error('Resultado inválido');
-  return value;
+  expr=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.').trim();
+  if(!/^[0-9+\-*/().%\s]*$/.test(expr))throw new Error('Expressão inválida');
+  expr=expr.replace(/(\d+(\.\d+)?)%/g,'($1/100)');
+  const fn=new Function('return '+expr);const v=fn();
+  if(typeof v!=='number'||!isFinite(v))throw new Error('Resultado inválido');
+  return v;
 }
-
-/* quando o usuário quer "adicionar" ao tipo selecionado (Enter ou botão) */
 function addToSelected(){
-  if(!selected){
-    alert('Selecione um tipo (F5 Dinheiro / F6 Crédito / F7 Débito) antes de adicionar.');
-    return;
-  }
-  const raw = entrada.value.trim();
-  if(!raw){
-    alert('Digite um valor ou expressão antes de adicionar.');
-    return;
-  }
-  let val;
-  try{
-    val = evalExpression(raw);
-  }catch(err){
-    alert('Erro ao calcular: ' + err.message);
-    return;
-  }
-  // soma no tipo
-  if(selected === 'din') totals.din += val;
-  if(selected === 'cred') totals.cred += val;
-  if(selected === 'deb') totals.deb += val;
-
-  // registra histórico
-  const label = selected === 'din' ? 'Dinheiro' : selected === 'cred' ? 'Crédito' : 'Débito';
-  pushHistory({
-    typeLabel: label,
-    expr: `${raw} = ${formatMoney(val)}`,
-    note: `Adicionado ao ${label} → Total agora: ${formatMoney(selected === 'din'?totals.din: selected==='cred'?totals.cred:totals.deb)}`
-  });
-
-  entrada.value = '';
-  updateTotalsUI();
+  if(!selected){alert('Selecione um tipo (F2/F3/F4).');return;}
+  const raw=entrada.value.trim();if(!raw){alert('Digite um valor.');return;}
+  let val;try{val=evalExpression(raw);}catch(e){alert(e.message);return;}
+  totals[selected]+=val;
+  const label=selected==='din'?'Dinheiro':selected==='cred'?'Crédito':'Débito';
+  pushHistory({typeLabel:label,expr:`${raw} = ${formatMoney(val)}`,note:`Adicionado → Total: ${formatMoney(totals[selected])}`});
+  entrada.value='';updateTotalsUI();
 }
+function calcOnly(){const raw=entrada.value.trim();if(!raw){alert('Digite algo.');return;}
+  try{alert('Resultado: '+formatMoney(evalExpression(raw)));}catch(e){alert(e.message);} }
+function selectType(t){selected=(selected===t)?null:t;updateTotalsUI();}
+function clearHistory(){if(confirm('Limpar histórico?')){history=[];renderHistory();}}
+function clearType(t){if(confirm('Limpar total de '+t+'?')){totals[t]=0;updateTotalsUI();}}
 
-/* apenas calcular e mostrar num aviso (sem adicionar) */
-function calcOnly(){
-  const raw = entrada.value.trim();
-  if(!raw){ alert('Digite algo para calcular.'); return; }
-  try{
-    const v = evalExpression(raw);
-    alert(`Resultado: ${formatMoney(v)}`);
-  }catch(err){
-    alert('Erro: ' + err.message);
-  }
-}
+clearHistBtn.onclick=clearHistory;
+document.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>clearType(b.dataset.clear));
+btnF2.onclick=()=>selectType('din');btnF3.onclick=()=>selectType('cred');btnF4.onclick=()=>selectType('deb');
+chkDin.onchange=()=>selectType(chkDin.checked?'din':null);
+chkCred.onchange=()=>selectType(chkCred.checked?'cred':null);
+chkDeb.onchange=()=>selectType(chkDeb.checked?'deb':null);
+document.getElementById('btnAdd').onclick=addToSelected;
+document.getElementById('btnCalc').onclick=calcOnly;
 
-/* limpar histórico */
-clearHistBtn.addEventListener('click', ()=>{
-  if(!confirm('Limpar histórico?')) return;
-  history = [];
-  renderHistory();
+document.addEventListener('keydown',e=>{
+  const allowed='0123456789+-*/().,%';
+  // Seleção
+  if(['F2','F3','F4'].includes(e.key)){e.preventDefault();
+    if(e.key==='F2')selectType('din');
+    if(e.key==='F3')selectType('cred');
+    if(e.key==='F4')selectType('deb');
+    return;}
+  // Limpeza
+  if(['F5','F6','F7'].includes(e.key)){e.preventDefault();
+    if(e.key==='F5')clearType('din');
+    if(e.key==='F6')clearType('cred');
+    if(e.key==='F7')clearType('deb');
+    return;}
+  // Enter
+  if(e.key==='Enter'){e.preventDefault();if(e.ctrlKey)calcOnly();else addToSelected();return;}
+  if(e.key==='Escape'){entrada.value='';return;}
+  if(e.ctrlKey&&e.key.toLowerCase()==='l'){e.preventDefault();clearHistory();return;}
+  if(e.key==='Backspace'){if(document.activeElement!==entrada)entrada.focus();return;}
+  if(e.key===','||e.key==='.'){if(document.activeElement!==entrada){entrada.value+=',';e.preventDefault();}return;}
+  if(allowed.includes(e.key)&&document.activeElement!==entrada){entrada.value+=e.key;e.preventDefault();return;}
 });
-
-/* limpar totais */
-document.querySelectorAll('[data-clear]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const type = btn.getAttribute('data-clear');
-    if(confirm('Limpar total de ' + type + '?')){
-      if(type === 'din') totals.din = 0;
-      if(type === 'cred') totals.cred = 0;
-      if(type === 'deb') totals.deb = 0;
-      updateTotalsUI();
-    }
-  });
-});
-
-/* botões F5/F6/F7 na UI (clicáveis) */
-btnF5.addEventListener('click', ()=> selectType('din'));
-btnF6.addEventListener('click', ()=> selectType('cred'));
-btnF7.addEventListener('click', ()=> selectType('deb'));
-
-/* checkboxes também selecionam (como alternativa) */
-chkDin.addEventListener('change', ()=> selectType(chkDin.checked ? 'din' : null));
-chkCred.addEventListener('change', ()=> selectType(chkCred.checked ? 'cred' : null));
-chkDeb.addEventListener('change', ()=> selectType(chkDeb.checked ? 'deb' : null));
-
-function selectType(t){
-  // alterna: se já selecionado, desmarca
-  if(selected === t){ selected = null; }
-  else selected = t;
-  updateTotalsUI();
-}
-
-/* REMOÇÃO: Eventos do keypad virtual foram removidos. */
-
-/* botões add / calc */
-document.getElementById('btnAdd').addEventListener('click', addToSelected);
-document.getElementById('btnCalc').addEventListener('click', calcOnly);
-
-/* teclado físico */
-document.addEventListener('keydown', (e)=>{
-  const allowed = '0123456789+-*/().,%';
-  // prevenir F5 padrão (refresh) etc.
-  if(['F5','F6','F7'].includes(e.key)){
-    e.preventDefault();
-    if(e.key === 'F5') selectType('din');
-    if(e.key === 'F6') selectType('cred');
-    if(e.key === 'F7') selectType('deb');
-    return;
-  }
-
-  if(e.key === 'Enter'){
-    e.preventDefault();
-    addToSelected();
-    return;
-  }
-  if(e.key === 'Escape'){
-    entrada.value = '';
-    return;
-  }
-  if(e.key === 'Backspace'){
-    // permite apagar no campo
-    if(document.activeElement !== entrada){
-      entrada.focus();
-    }
-    // default backspace will do the job when input focused; let it
-    return;
-  }
-
-  // Aceita vírgula como decimal (do teclado principal ou numpad)
-  if(e.key === ',' || e.key === '.'){ 
-    if(document.activeElement !== entrada) {
-      entrada.value += ','; 
-      e.preventDefault(); 
-      return; 
-    }
-    // Se estiver focado no input, deixa o input lidar com o evento
-    return;
-  }
-
-  // se tecla válida, inserir no campo (quando não estiver digitando em outro input)
-  if(allowed.includes(e.key) && document.activeElement !== entrada){
-    // Permite que teclas de cálculo sejam digitadas mesmo sem o foco estar na entrada, para agilizar.
-    entrada.value += e.key;
-    e.preventDefault();
-    return;
-  }
-});
-
-/* inicialização */
-renderHistory();
-updateTotalsUI();
-
-/* foco inicial */
-entrada.focus();
-
-/* dica: ao colar texto, normalizar vírgula */
-entrada.addEventListener('paste', (ev)=>{
+renderHistory();updateTotalsUI();entrada.focus();
+entrada.addEventListener('paste',ev=>{
   ev.preventDefault();
-  const text = (ev.clipboardData || window.clipboardData).getData('text');
-  // Substitui ponto por vírgula e remove espaços ao colar
-  entrada.value += text.replace(/\s+/g,'').replace(/\./g,',');
+  entrada.value+=(ev.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,'').replace(/\./g,',');
 });
 </script>
 </body>
