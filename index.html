@@ -44,6 +44,17 @@
   .hist-item{padding:8px;border-radius:6px;margin-bottom:8px;background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.03);font-size:14px;}
   .hist-small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+  /* Estilo para o nome completo no histórico (cor e fonte destacada) */
+  .hist-type{
+      color: var(--accent-2); /* Cor roxa para destaque */
+      font-weight: 700;
+      margin-right: 4px;
+      font-size: 13px;
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(107, 70, 193, 0.2); /* Fundo sutil */
+  }
   .hist-result{color:var(--accent);font-weight:700;margin-left:4px;}
   input#entrada{
     height:80px;font-size:32px;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
@@ -67,7 +78,7 @@
     .app{grid-template-columns:1fr;padding:12px;}
   }
 
-  /* ======= AJUDA VISUAL ======= */
+  /* ======= AJUDA VISUAL E POPUP DE RESULTADO (NOVOS ESTILOS) ======= */
   .shortcut-box{
     width:230px;
     background:rgba(39,41,61,0.95);
@@ -100,6 +111,77 @@
     border-top:1px solid rgba(255,255,255,0.1);
     margin:6px 0;
   }
+
+  /* Estilos para a janela PopUp de Resultados */
+  #results-popup{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.7);
+    display:none; /* Inicia oculto */
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+  }
+  #results-popup.show{
+    display:flex; /* Exibir quando a classe 'show' for adicionada */
+  }
+  .popup-content{
+    background:var(--card);
+    padding:25px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    width:90%;
+    max-width:400px;
+    border:1px solid rgba(255,255,255,0.1);
+    animation:fadeIn 0.2s ease-out;
+  }
+  .popup-content h3{
+    color:var(--text);
+    margin-top:0;
+    margin-bottom:15px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    padding-bottom:10px;
+  }
+  .popup-result-item{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    font-size:16px;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  /* Remove o estilo de destaque do total geral, pois ele foi removido */
+  .popup-result-item:last-child{
+    border-bottom:none;
+  }
+  .popup-result-label{
+    color:var(--muted);
+  }
+  .popup-result-value{
+    color:var(--accent); /* Destaca o valor */
+    font-weight: 700;
+  }
+  .popup-close-btn{
+    display:block;
+    width:100%;
+    padding:10px;
+    margin-top:20px;
+    background:var(--accent);
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:700;
+    transition:background 0.1s;
+  }
+  .popup-close-btn:hover{
+    background:#008f5a;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
 </style>
 </head>
 <body>
@@ -126,6 +208,7 @@
       <div style="display:flex;gap:8px;margin-top:8px;">
         <button class="small-btn" id="btnAdd">Adicionar (Enter)</button>
         <button class="small-btn" id="btnCalc">Calcular (Ctrl+Enter)</button>
+        <button class="small-btn" id="btnResults">Resultados (F10)</button>
       </div>
 
       <div class="acc">
@@ -163,7 +246,6 @@
     </div>
   </div>
 
-  <!-- Tabela lateral de atalhos -->
   <div class="shortcut-box">
     <h4>🧭 Atalhos do Teclado</h4>
     <div><kbd>F2</kbd> Dinheiro • <kbd>F5</kbd> limpar</div>
@@ -172,8 +254,17 @@
     <hr>
     <div><kbd>Enter</kbd> Adicionar</div>
     <div><kbd>Ctrl+Enter</kbd> Calcular</div>
-    <div><kbd>Esc</kbd> Limpar entrada</div>
+    <div><kbd>F10</kbd> Resultados</div> <div><kbd>Esc</kbd> Limpar entrada / Fechar PopUp</div>
     <div><kbd>Ctrl+L</kbd> Limpar histórico</div>
+  </div>
+</div>
+
+<div id="results-popup">
+  <div class="popup-content">
+    <h3>Resultados Atuais</h3>
+    <div id="popup-results-list">
+      </div>
+    <button class="popup-close-btn" id="close-popup-btn">OK / Fechar (Esc)</button>
   </div>
 </div>
 
@@ -191,6 +282,11 @@ const chkDeb=document.getElementById('chkDeb');
 const btnF2=document.getElementById('btnF2');
 const btnF3=document.getElementById('btnF3');
 const btnF4=document.getElementById('btnF4');
+const resultsPopup = document.getElementById('results-popup');
+const popupResultsList = document.getElementById('popup-results-list');
+const closePopupBtn = document.getElementById('close-popup-btn');
+const btnResults = document.getElementById('btnResults');
+
 let totals={din:0,cred:0,deb:0};
 let history=[];
 let selected=null;
@@ -206,6 +302,8 @@ function updateTotalsUI(){
   btnF4.classList.toggle('active',selected==='deb');
 }
 function pushHistory(o){history.unshift(o);renderHistory();}
+
+// ALTERAÇÃO AQUI: Mostrar o nome completo do tipo (Dinheiro, Crédito, Débito)
 function renderHistory(){
   histList.innerHTML='';
   if(!history.length){histList.innerHTML='<div class="hist-item">Nenhuma operação ainda.</div>';return;}
@@ -214,10 +312,12 @@ function renderHistory(){
     d.className='hist-item';
     const parts=it.expr.split('=');
     const exp=parts[0].trim();const res=parts[1]?.trim()||'';
-    d.innerHTML=`<strong>[${it.typeLabel[0]}]</strong> ${exp} = <span class="hist-result">${res}</span><div class="hist-small">${it.note}</div>`;
+    // Mudei it.typeLabel[0] para <span class="hist-type">${it.typeLabel}</span>
+    d.innerHTML=`<span class="hist-type">${it.typeLabel}</span> ${exp} = <span class="hist-result">${res}</span><div class="hist-small">${it.note}</div>`;
     histList.appendChild(d);
   });
 }
+
 function evalExpression(expr){
   expr=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.').trim();
   if(!/^[0-9+\-*/().%\s]*$/.test(expr))throw new Error('Expressão inválida');
@@ -241,6 +341,31 @@ function selectType(t){selected=(selected===t)?null:t;updateTotalsUI();}
 function clearHistory(){if(confirm('Limpar histórico?')){history=[];renderHistory();}}
 function clearType(t){if(confirm('Limpar total de '+t+'?')){totals[t]=0;updateTotalsUI();}}
 
+// ALTERAÇÃO AQUI: Removida a soma do Total Geral (só exibe os 3 tipos)
+function showResultsPopup() {
+    popupResultsList.innerHTML = `
+      <div class="popup-result-item">
+        <span class="popup-result-label">Dinheiro:</span>
+        <span class="popup-result-value">${formatMoney(totals.din)}</span>
+      </div>
+      <div class="popup-result-item">
+        <span class="popup-result-label">Crédito:</span>
+        <span class="popup-result-value">${formatMoney(totals.cred)}</span>
+      </div>
+      <div class="popup-result-item">
+        <span class="popup-result-label">Débito:</span>
+        <span class="popup-result-value">${formatMoney(totals.deb)}</span>
+      </div>
+    `;
+    resultsPopup.classList.add('show');
+    closePopupBtn.focus();
+}
+
+function hideResultsPopup() {
+    resultsPopup.classList.remove('show');
+    entrada.focus();
+}
+
 clearHistBtn.onclick=clearHistory;
 document.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>clearType(b.dataset.clear));
 btnF2.onclick=()=>selectType('din');btnF3.onclick=()=>selectType('cred');btnF4.onclick=()=>selectType('deb');
@@ -249,8 +374,19 @@ chkCred.onchange=()=>selectType(chkCred.checked?'cred':null);
 chkDeb.onchange=()=>selectType(chkDeb.checked?'deb':null);
 document.getElementById('btnAdd').onclick=addToSelected;
 document.getElementById('btnCalc').onclick=calcOnly;
+btnResults.onclick = showResultsPopup;
+closePopupBtn.onclick = hideResultsPopup;
 
 document.addEventListener('keydown',e=>{
+  // Se o popup estiver visível, ESC e ENTER fecham
+  if (resultsPopup.classList.contains('show')) {
+    if (e.key === 'Escape' || e.key === 'Enter') {
+      e.preventDefault();
+      hideResultsPopup();
+      return;
+    }
+  }
+
   const allowed='0123456789+-*/().,%';
   // Seleção
   if(['F2','F3','F4'].includes(e.key)){e.preventDefault();
@@ -264,12 +400,30 @@ document.addEventListener('keydown',e=>{
     if(e.key==='F6')clearType('cred');
     if(e.key==='F7')clearType('deb');
     return;}
+  
+  // Atalho F10 para resultados
+  if (e.key === 'F10') {
+    e.preventDefault();
+    showResultsPopup();
+    return;
+  }
+
   // Enter
   if(e.key==='Enter'){e.preventDefault();if(e.ctrlKey)calcOnly();else addToSelected();return;}
+  
+  // Escape
   if(e.key==='Escape'){entrada.value='';return;}
+  
+  // Ctrl+L
   if(e.ctrlKey&&e.key.toLowerCase()==='l'){e.preventDefault();clearHistory();return;}
+  
+  // Backspace
   if(e.key==='Backspace'){if(document.activeElement!==entrada)entrada.focus();return;}
+  
+  // Vírgula/Ponto
   if(e.key===','||e.key==='.'){if(document.activeElement!==entrada){entrada.value+=',';e.preventDefault();}return;}
+  
+  // Teclas permitidas (se o foco não estiver na entrada)
   if(allowed.includes(e.key)&&document.activeElement!==entrada){entrada.value+=e.key;e.preventDefault();return;}
 });
 renderHistory();updateTotalsUI();entrada.focus();
@@ -277,6 +431,7 @@ entrada.addEventListener('paste',ev=>{
   ev.preventDefault();
   entrada.value+=(ev.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,'').replace(/\./g,',');
 });
+
 </script>
 </body>
 </html>
