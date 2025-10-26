@@ -81,31 +81,36 @@
   /* ======= AJUDA VISUAL E POPUP DE RESULTADO (NOVOS ESTILOS) ======= */
   .shortcut-box{
     width:230px;
-    background:rgba(39,41,61,0.95);
-    border:1px solid rgba(255,255,255,0.08);
-    padding:14px 16px;
-    border-radius:10px;
-    font-size:13px;
+    background: linear-gradient(180deg, #27293d, #3a3b4e); /* Fundo mais destacado */
+    border:2px solid #00a86b; /* Borda verde destaque */
+    padding:16px 18px;
+    border-radius:12px;
+    font-size:14px;
     color:var(--muted);
-    box-shadow:var(--shadow);
-    line-height:1.6;
+    box-shadow:0 6px 20px rgba(0,168,107,0.4); /* Sombra mais evidente */
+    line-height:1.8;
     height:fit-content;
-  }
-  .shortcut-box h4{
-    margin:0 0 8px 0;
-    color:var(--text);
-    font-size:15px;
-    font-weight:700;
-    text-align:center;
-  }
-  .shortcut-box kbd{
-    background:rgba(255,255,255,0.1);
-    border-radius:4px;
-    padding:2px 5px;
-    font-size:12px;
-    color:var(--accent);
-    margin-right:4px;
-  }
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+/* Pequeno efeito hover */
+.shortcut-box kbd:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,168,107,0.7);
+}
+
+/* Títulos */
+.shortcut-box kbd {
+    background: #00a86b;      /* cor da tecla */
+    color: #ffffff;           /* texto da tecla */
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 4px;
+    box-shadow: 0 2px 4px rgba(0,168,107,0.5);
+}
+
   hr{
     border:none;
     border-top:1px solid rgba(255,255,255,0.1);
@@ -269,6 +274,14 @@
 </div>
 
 <script>
+function showResultsPopup() {
+    // Envia os dados e o pedido para o processo principal (main.js)
+    if (window.electronAPI) {
+        // Envia os totais atuais para a nova janela exibir
+        window.electronAPI.openResultsWindow(totals);
+    }
+}
+
 /* ======= LÓGICA ======= */
 const entrada=document.getElementById('entrada');
 const histList=document.getElementById('histList');
