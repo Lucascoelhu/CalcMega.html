@@ -5,21 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Calculadora Grupo Mega — (Apenas Teclado)</title>
 <style>
+  /* ====== TEMA CLARO CINZA ====== */
   :root{
-    --bg:#1e1e2d;
-    --card:#27293d;
-    --muted:#a0aec0;
-    --text:#ffffff;
-    --accent:#00a86b;
+    --bg:#e5e5e8;
+    --card:#f4f4f6;
+    --muted:#555;
+    --text:#1a1a1a;
+    --accent:#008f5a;
     --accent-2:#6b46c1;
-    --danger:#e35b5b;
-    --shadow:0 4px 12px rgba(0,0,0,0.4);
-    --glass:linear-gradient(180deg,rgba(39,41,61,0.95),rgba(45,47,70,0.95));
+    --danger:#d33;
+    --shadow:0 4px 12px rgba(0,0,0,0.15);
+    --glass:linear-gradient(180deg,rgba(250,250,250,0.95),rgba(235,235,235,0.95));
   }
   *{box-sizing:border-box;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif}
   body{
     margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(180deg,var(--bg),#19192a);color:var(--text);padding:24px;
+    background:linear-gradient(180deg,var(--bg),#d7d7db);
+    color:var(--text);padding:24px;
   }
   .container{
     display:flex;
@@ -31,46 +33,71 @@
   }
   .app{
     flex:1;
-    background:var(--card);border-radius:12px;
-    box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px;
-    border:1px solid rgba(255,255,255,0.05);
+    background:var(--card);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    padding:18px;
+    border:1px solid rgba(0,0,0,0.05);
   }
   .header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;}
   .title{font-weight:700;}
   .subtitle{color:var(--muted);font-size:13px}
-  .left,.right{padding:12px;border-radius:10px;background:var(--glass);border:1px solid rgba(255,255,255,0.06);}
-  .history{min-height:400px;background:rgba(0,0,0,0.2);border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,0.08);
-    overflow:auto;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-  .hist-item{padding:8px;border-radius:6px;margin-bottom:8px;background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.03);font-size:14px;}
+  .left,.right{padding:12px;border-radius:10px;background:var(--glass);border:1px solid rgba(0,0,0,0.06);}
+  
+  /* ===== Scroll no histórico ===== */
+  .history{
+    min-height:400px;
+    max-height:400px;
+    background:rgba(0,0,0,0.05);
+    border-radius:8px;
+    padding:12px;
+    border:1px solid rgba(0,0,0,0.08);
+    overflow-y:auto;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  }
+  .hist-item{
+    padding:8px;
+    border-radius:6px;
+    margin-bottom:8px;
+    background:rgba(255,255,255,0.9);
+    border:1px solid rgba(0,0,0,0.05);
+    font-size:14px;
+  }
   .hist-small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
-  /* Estilo para o nome completo no histórico (cor e fonte destacada) */
   .hist-type{
-      color: var(--accent-2); /* Cor roxa para destaque */
+      color: var(--accent-2);
       font-weight: 700;
       margin-right: 4px;
       font-size: 13px;
       display: inline-block;
       padding: 2px 6px;
       border-radius: 4px;
-      background: rgba(107, 70, 193, 0.2); /* Fundo sutil */
+      background: rgba(107, 70, 193, 0.1);
   }
   .hist-result{color:var(--accent);font-weight:700;margin-left:4px;}
+  
   input#entrada{
-    height:80px;font-size:32px;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
-    background:rgba(0,0,0,0.3);color:var(--text);outline:none;text-align:right;
-    box-shadow:inset 0 1px 3px rgba(0,0,0,0.4);
+    height:80px;font-size:32px;padding:12px;border-radius:8px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:rgba(255,255,255,0.8);
+    color:var(--text);
+    outline:none;
+    text-align:right;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.2);
   }
   .acc{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:center;padding:10px;border-radius:8px;
-    background:var(--card);border:1px solid rgba(255,255,255,0.05);}
+    background:var(--card);border:1px solid rgba(0,0,0,0.05);}
   .key-btn{height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;
-    border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);font-weight:700;color:var(--muted);}
+    border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.5);font-weight:700;color:var(--muted);}
   .key-btn.active{background:linear-gradient(180deg,var(--accent),#008f5a);color:white;border:none;}
   .tag{font-size:13px;color:var(--muted);}
   .amount{font-size:24px;font-weight:700;margin-top:4px;color:var(--accent);}
-  .small-btn{padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);
-    background:rgba(0,0,0,0.3);cursor:pointer;font-size:13px;color:var(--muted);}
-  .small-btn:hover{background:rgba(0,0,0,0.5);}
+  .small-btn{padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.1);
+    background:rgba(255,255,255,0.7);cursor:pointer;font-size:13px;color:var(--muted);}
+  .small-btn:hover{background:rgba(255,255,255,0.9);}
   input[type="checkbox"]{accent-color:var(--accent);}
   @media(max-width:950px){
     .container{flex-direction:column;align-items:center;}
@@ -78,115 +105,37 @@
     .app{grid-template-columns:1fr;padding:12px;}
   }
 
-  /* ======= AJUDA VISUAL E POPUP DE RESULTADO (NOVOS ESTILOS) ======= */
   .shortcut-box{
     width:230px;
-    background: linear-gradient(180deg, #27293d, #3a3b4e); /* Fundo mais destacado */
-    border:2px solid #00a86b; /* Borda verde destaque */
+    background: linear-gradient(180deg, #f0f0f2, #e0e0e5);
+    border:2px solid #00a86b;
     padding:16px 18px;
     border-radius:12px;
     font-size:14px;
     color:var(--muted);
-    box-shadow:0 6px 20px rgba(0,168,107,0.4); /* Sombra mais evidente */
+    box-shadow:0 6px 20px rgba(0,168,107,0.2);
     line-height:1.8;
     height:fit-content;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-/* Pequeno efeito hover */
-.shortcut-box kbd:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,168,107,0.7);
-}
-
-/* Títulos */
-.shortcut-box kbd {
-    background: #00a86b;      /* cor da tecla */
-    color: #ffffff;           /* texto da tecla */
+  }
+  .shortcut-box kbd{
+    background: #00a86b;
+    color: #ffffff;
     border-radius: 6px;
     padding: 2px 6px;
     font-size: 13px;
     font-weight: 700;
     margin-right: 4px;
-    box-shadow: 0 2px 4px rgba(0,168,107,0.5);
-}
+  }
+  hr{border:none;border-top:1px solid rgba(0,0,0,0.1);margin:6px 0;}
 
-  hr{
-    border:none;
-    border-top:1px solid rgba(255,255,255,0.1);
-    margin:6px 0;
-  }
-
-  /* Estilos para a janela PopUp de Resultados */
-  #results-popup{
-    position:fixed;
-    top:0;left:0;right:0;bottom:0;
-    background:rgba(0,0,0,0.7);
-    display:none; /* Inicia oculto */
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-  }
-  #results-popup.show{
-    display:flex; /* Exibir quando a classe 'show' for adicionada */
-  }
-  .popup-content{
-    background:var(--card);
-    padding:25px;
-    border-radius:12px;
-    box-shadow:var(--shadow);
-    width:90%;
-    max-width:400px;
-    border:1px solid rgba(255,255,255,0.1);
-    animation:fadeIn 0.2s ease-out;
-  }
-  .popup-content h3{
-    color:var(--text);
-    margin-top:0;
-    margin-bottom:15px;
-    border-bottom:1px solid rgba(255,255,255,0.1);
-    padding-bottom:10px;
-  }
-  .popup-result-item{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    font-size:16px;
-    border-bottom:1px solid rgba(255,255,255,0.05);
-  }
-  /* Remove o estilo de destaque do total geral, pois ele foi removido */
-  .popup-result-item:last-child{
-    border-bottom:none;
-  }
-  .popup-result-label{
-    color:var(--muted);
-  }
-  .popup-result-value{
-    color:var(--accent); /* Destaca o valor */
-    font-weight: 700;
-  }
-  .popup-close-btn{
-    display:block;
-    width:100%;
-    padding:10px;
-    margin-top:20px;
-    background:var(--accent);
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:16px;
-    font-weight:700;
-    transition:background 0.1s;
-  }
-  .popup-close-btn:hover{
-    background:#008f5a;
-  }
-
-  @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-20px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
+  #results-popup{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:1000;}
+  #results-popup.show{display:flex;}
+  .popup-content{background:var(--card);padding:25px;border-radius:12px;box-shadow:var(--shadow);width:90%;max-width:400px;border:1px solid rgba(0,0,0,0.1);}
+  .popup-result-item{display:flex;justify-content:space-between;padding:8px 0;font-size:16px;border-bottom:1px solid rgba(0,0,0,0.05);}
+  .popup-result-label{color:var(--muted);}
+  .popup-result-value{color:var(--accent);font-weight:700;}
+  .popup-close-btn{display:block;width:100%;padding:10px;margin-top:20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-size:16px;font-weight:700;}
+  .popup-close-btn:hover{background:#008f5a;}
 </style>
 </head>
 <body>
@@ -267,22 +216,12 @@
 <div id="results-popup">
   <div class="popup-content">
     <h3>Resultados Atuais</h3>
-    <div id="popup-results-list">
-      </div>
+    <div id="popup-results-list"></div>
     <button class="popup-close-btn" id="close-popup-btn">OK / Fechar (Esc)</button>
   </div>
 </div>
 
 <script>
-function showResultsPopup() {
-    // Envia os dados e o pedido para o processo principal (main.js)
-    if (window.electronAPI) {
-        // Envia os totais atuais para a nova janela exibir
-        window.electronAPI.openResultsWindow(totals);
-    }
-}
-
-/* ======= LÓGICA ======= */
 const entrada=document.getElementById('entrada');
 const histList=document.getElementById('histList');
 const clearHistBtn=document.getElementById('clearHistBtn');
@@ -315,8 +254,6 @@ function updateTotalsUI(){
   btnF4.classList.toggle('active',selected==='deb');
 }
 function pushHistory(o){history.unshift(o);renderHistory();}
-
-// ALTERAÇÃO AQUI: Mostrar o nome completo do tipo (Dinheiro, Crédito, Débito)
 function renderHistory(){
   histList.innerHTML='';
   if(!history.length){histList.innerHTML='<div class="hist-item">Nenhuma operação ainda.</div>';return;}
@@ -325,7 +262,6 @@ function renderHistory(){
     d.className='hist-item';
     const parts=it.expr.split('=');
     const exp=parts[0].trim();const res=parts[1]?.trim()||'';
-    // Mudei it.typeLabel[0] para <span class="hist-type">${it.typeLabel}</span>
     d.innerHTML=`<span class="hist-type">${it.typeLabel}</span> ${exp} = <span class="hist-result">${res}</span><div class="hist-small">${it.note}</div>`;
     histList.appendChild(d);
   });
@@ -354,30 +290,16 @@ function selectType(t){selected=(selected===t)?null:t;updateTotalsUI();}
 function clearHistory(){if(confirm('Limpar histórico?')){history=[];renderHistory();}}
 function clearType(t){if(confirm('Limpar total de '+t+'?')){totals[t]=0;updateTotalsUI();}}
 
-// ALTERAÇÃO AQUI: Removida a soma do Total Geral (só exibe os 3 tipos)
 function showResultsPopup() {
-    popupResultsList.innerHTML = `
-      <div class="popup-result-item">
-        <span class="popup-result-label">Dinheiro:</span>
-        <span class="popup-result-value">${formatMoney(totals.din)}</span>
-      </div>
-      <div class="popup-result-item">
-        <span class="popup-result-label">Crédito:</span>
-        <span class="popup-result-value">${formatMoney(totals.cred)}</span>
-      </div>
-      <div class="popup-result-item">
-        <span class="popup-result-label">Débito:</span>
-        <span class="popup-result-value">${formatMoney(totals.deb)}</span>
-      </div>
-    `;
-    resultsPopup.classList.add('show');
-    closePopupBtn.focus();
+  popupResultsList.innerHTML = `
+    <div class="popup-result-item"><span class="popup-result-label">Dinheiro:</span><span class="popup-result-value">${formatMoney(totals.din)}</span></div>
+    <div class="popup-result-item"><span class="popup-result-label">Crédito:</span><span class="popup-result-value">${formatMoney(totals.cred)}</span></div>
+    <div class="popup-result-item"><span class="popup-result-label">Débito:</span><span class="popup-result-value">${formatMoney(totals.deb)}</span></div>
+  `;
+  resultsPopup.classList.add('show');
+  closePopupBtn.focus();
 }
-
-function hideResultsPopup() {
-    resultsPopup.classList.remove('show');
-    entrada.focus();
-}
+function hideResultsPopup(){resultsPopup.classList.remove('show');entrada.focus();}
 
 clearHistBtn.onclick=clearHistory;
 document.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>clearType(b.dataset.clear));
@@ -390,53 +312,32 @@ document.getElementById('btnCalc').onclick=calcOnly;
 btnResults.onclick = showResultsPopup;
 closePopupBtn.onclick = hideResultsPopup;
 
-document.addEventListener('keydown',e=>{
-  // Se o popup estiver visível, ESC e ENTER fecham
-  if (resultsPopup.classList.contains('show')) {
-    if (e.key === 'Escape' || e.key === 'Enter') {
-      e.preventDefault();
-      hideResultsPopup();
-      return;
-    }
-  }
+/* ======== NOVO: BLOQUEAR DUPLICAÇÃO DE SINAIS ======== */
+entrada.addEventListener('input', ()=>{
+  entrada.value = entrada.value
+    .replace(/([+\-*/%])\1+/g, '$1')
+    .replace(/,{2,}/g, ',');
+});
 
+document.addEventListener('keydown',e=>{
+  if (resultsPopup.classList.contains('show')) {
+    if (e.key === 'Escape' || e.key === 'Enter') {e.preventDefault();hideResultsPopup();return;}
+  }
   const allowed='0123456789+-*/().,%';
-  // Seleção
   if(['F2','F3','F4'].includes(e.key)){e.preventDefault();
     if(e.key==='F2')selectType('din');
     if(e.key==='F3')selectType('cred');
-    if(e.key==='F4')selectType('deb');
-    return;}
-  // Limpeza
+    if(e.key==='F4')selectType('deb');return;}
   if(['F5','F6','F7'].includes(e.key)){e.preventDefault();
     if(e.key==='F5')clearType('din');
     if(e.key==='F6')clearType('cred');
-    if(e.key==='F7')clearType('deb');
-    return;}
-  
-  // Atalho F10 para resultados
-  if (e.key === 'F10') {
-    e.preventDefault();
-    showResultsPopup();
-    return;
-  }
-
-  // Enter
+    if(e.key==='F7')clearType('deb');return;}
+  if (e.key === 'F10'){e.preventDefault();showResultsPopup();return;}
   if(e.key==='Enter'){e.preventDefault();if(e.ctrlKey)calcOnly();else addToSelected();return;}
-  
-  // Escape
   if(e.key==='Escape'){entrada.value='';return;}
-  
-  // Ctrl+L
   if(e.ctrlKey&&e.key.toLowerCase()==='l'){e.preventDefault();clearHistory();return;}
-  
-  // Backspace
   if(e.key==='Backspace'){if(document.activeElement!==entrada)entrada.focus();return;}
-  
-  // Vírgula/Ponto
   if(e.key===','||e.key==='.'){if(document.activeElement!==entrada){entrada.value+=',';e.preventDefault();}return;}
-  
-  // Teclas permitidas (se o foco não estiver na entrada)
   if(allowed.includes(e.key)&&document.activeElement!==entrada){entrada.value+=e.key;e.preventDefault();return;}
 });
 renderHistory();updateTotalsUI();entrada.focus();
@@ -444,7 +345,6 @@ entrada.addEventListener('paste',ev=>{
   ev.preventDefault();
   entrada.value+=(ev.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,'').replace(/\./g,',');
 });
-
 </script>
 </body>
 </html>
