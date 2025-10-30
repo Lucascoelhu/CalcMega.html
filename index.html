@@ -5,31 +5,24 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Calculadora Grupo Mega — (Apenas Teclado)</title>
 <style>
-  /* ====== TEMA CLARO CINZA ====== */
   :root{
-    --bg:#e5e5e8;
-    --card:#f4f4f6;
+    --bg:#e8eaed;
+    --card:#ffffff;
     --muted:#555;
-    --text:#1a1a1a;
-    --accent:#008f5a;
+    --text:#111;
+    --accent:#00a86b;
     --accent-2:#6b46c1;
-    --danger:#d33;
+    --danger:#e35b5b;
     --shadow:0 4px 12px rgba(0,0,0,0.15);
-    --glass:linear-gradient(180deg,rgba(250,250,250,0.95),rgba(235,235,235,0.95));
   }
   *{box-sizing:border-box;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif}
   body{
     margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(180deg,var(--bg),#d7d7db);
-    color:var(--text);padding:24px;
+    background:var(--bg);color:var(--text);padding:24px;
   }
   .container{
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    gap:20px;
-    width:100%;
-    max-width:1100px;
+    display:flex;align-items:flex-start;justify-content:center;gap:20px;
+    width:100%;max-width:1100px;
   }
   .app{
     flex:1;
@@ -43,26 +36,21 @@
     border:1px solid rgba(0,0,0,0.05);
   }
   .header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .title{font-weight:700;}
+  .title{font-weight:700;font-size:18px;}
   .subtitle{color:var(--muted);font-size:13px}
-  .left,.right{padding:12px;border-radius:10px;background:var(--glass);border:1px solid rgba(0,0,0,0.06);}
-  
-  /* ===== Scroll no histórico ===== */
+  .left,.right{padding:12px;border-radius:10px;background:#f2f3f5;border:1px solid rgba(0,0,0,0.06);}
   .history{
-    min-height:400px;
-    max-height:400px;
-    background:rgba(0,0,0,0.05);
+    min-height:400px;max-height:400px;
+    background:#fff;
     border-radius:8px;
     padding:12px;
-    border:1px solid rgba(0,0,0,0.08);
+    border:1px solid rgba(0,0,0,0.1);
     overflow-y:auto;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    box-shadow:inset 0 2px 6px rgba(0,0,0,0.05);
   }
   .hist-item{
-    padding:8px;
-    border-radius:6px;
-    margin-bottom:8px;
-    background:rgba(255,255,255,0.9);
+    padding:8px;border-radius:6px;margin-bottom:8px;
+    background:rgba(0,0,0,0.03);
     border:1px solid rgba(0,0,0,0.05);
     font-size:14px;
   }
@@ -75,29 +63,37 @@
       display: inline-block;
       padding: 2px 6px;
       border-radius: 4px;
-      background: rgba(107, 70, 193, 0.1);
+      background: rgba(107, 70, 193, 0.15);
   }
   .hist-result{color:var(--accent);font-weight:700;margin-left:4px;}
-  
   input#entrada{
     height:80px;font-size:32px;padding:12px;border-radius:8px;
     border:1px solid rgba(0,0,0,0.1);
-    background:rgba(255,255,255,0.8);
+    background:#fdfdfd;
     color:var(--text);
-    outline:none;
-    text-align:right;
-    box-shadow:inset 0 1px 3px rgba(0,0,0,0.2);
+    outline:none;text-align:right;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);
   }
-  .acc{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:center;padding:10px;border-radius:8px;
-    background:var(--card);border:1px solid rgba(0,0,0,0.05);}
-  .key-btn{height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;
-    border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.5);font-weight:700;color:var(--muted);}
-  .key-btn.active{background:linear-gradient(180deg,var(--accent),#008f5a);color:white;border:none;}
+  .acc{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:center;
+    padding:10px;border-radius:8px;background:var(--card);
+    border:1px solid rgba(0,0,0,0.1);}
+  .key-btn{
+    height:40px;display:flex;align-items:center;justify-content:center;
+    border-radius:6px;border:1px solid rgba(0,0,0,0.1);
+    background:rgba(0,0,0,0.05);font-weight:700;color:var(--muted);
+  }
+  .key-btn.active{
+    background:linear-gradient(180deg,var(--accent),#008f5a);color:white;border:none;
+  }
   .tag{font-size:13px;color:var(--muted);}
   .amount{font-size:24px;font-weight:700;margin-top:4px;color:var(--accent);}
-  .small-btn{padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.1);
-    background:rgba(255,255,255,0.7);cursor:pointer;font-size:13px;color:var(--muted);}
-  .small-btn:hover{background:rgba(255,255,255,0.9);}
+  .small-btn{
+    padding:6px 8px;border-radius:6px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:rgba(0,0,0,0.05);
+    cursor:pointer;font-size:13px;color:var(--muted);
+  }
+  .small-btn:hover{background:rgba(0,0,0,0.1);}
   input[type="checkbox"]{accent-color:var(--accent);}
   @media(max-width:950px){
     .container{flex-direction:column;align-items:center;}
@@ -107,8 +103,8 @@
 
   .shortcut-box{
     width:230px;
-    background: linear-gradient(180deg, #f0f0f2, #e0e0e5);
-    border:2px solid #00a86b;
+    background: #ffffff;
+    border:2px solid var(--accent);
     padding:16px 18px;
     border-radius:12px;
     font-size:14px;
@@ -117,25 +113,64 @@
     line-height:1.8;
     height:fit-content;
   }
-  .shortcut-box kbd{
-    background: #00a86b;
+  .shortcut-box kbd {
+    background: var(--accent);
     color: #ffffff;
     border-radius: 6px;
     padding: 2px 6px;
     font-size: 13px;
     font-weight: 700;
     margin-right: 4px;
+    box-shadow: 0 2px 4px rgba(0,168,107,0.4);
   }
-  hr{border:none;border-top:1px solid rgba(0,0,0,0.1);margin:6px 0;}
+  hr{
+    border:none;
+    border-top:1px solid rgba(0,0,0,0.1);
+    margin:6px 0;
+  }
 
-  #results-popup{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:1000;}
+  /* PopUp de resultados */
+  #results-popup{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+  }
   #results-popup.show{display:flex;}
-  .popup-content{background:var(--card);padding:25px;border-radius:12px;box-shadow:var(--shadow);width:90%;max-width:400px;border:1px solid rgba(0,0,0,0.1);}
-  .popup-result-item{display:flex;justify-content:space-between;padding:8px 0;font-size:16px;border-bottom:1px solid rgba(0,0,0,0.05);}
+  .popup-content{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    width:90%;
+    max-width:400px;
+    border:1px solid rgba(0,0,0,0.1);
+    animation:fadeIn 0.2s ease-out;
+  }
+  .popup-content h3{
+    color:var(--text);
+    margin-top:0;
+    margin-bottom:15px;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+    padding-bottom:10px;
+  }
+  .popup-result-item{
+    display:flex;justify-content:space-between;
+    padding:8px 0;font-size:16px;
+    border-bottom:1px solid rgba(0,0,0,0.05);
+  }
   .popup-result-label{color:var(--muted);}
   .popup-result-value{color:var(--accent);font-weight:700;}
-  .popup-close-btn{display:block;width:100%;padding:10px;margin-top:20px;background:var(--accent);color:white;border:none;border-radius:6px;cursor:pointer;font-size:16px;font-weight:700;}
+  .popup-close-btn{
+    display:block;width:100%;padding:10px;margin-top:20px;
+    background:var(--accent);color:white;border:none;border-radius:6px;
+    cursor:pointer;font-size:16px;font-weight:700;
+  }
   .popup-close-btn:hover{background:#008f5a;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -208,7 +243,8 @@
     <hr>
     <div><kbd>Enter</kbd> Adicionar</div>
     <div><kbd>Ctrl+Enter</kbd> Calcular</div>
-    <div><kbd>F10</kbd> Resultados</div> <div><kbd>Esc</kbd> Limpar entrada / Fechar PopUp</div>
+    <div><kbd>F10</kbd> Resultados</div>
+    <div><kbd>Esc</kbd> Limpar entrada / Fechar PopUp</div>
     <div><kbd>Ctrl+L</kbd> Limpar histórico</div>
   </div>
 </div>
@@ -234,10 +270,10 @@ const chkDeb=document.getElementById('chkDeb');
 const btnF2=document.getElementById('btnF2');
 const btnF3=document.getElementById('btnF3');
 const btnF4=document.getElementById('btnF4');
-const resultsPopup = document.getElementById('results-popup');
-const popupResultsList = document.getElementById('popup-results-list');
-const closePopupBtn = document.getElementById('close-popup-btn');
-const btnResults = document.getElementById('btnResults');
+const resultsPopup=document.getElementById('results-popup');
+const popupResultsList=document.getElementById('popup-results-list');
+const closePopupBtn=document.getElementById('close-popup-btn');
+const btnResults=document.getElementById('btnResults');
 
 let totals={din:0,cred:0,deb:0};
 let history=[];
@@ -266,7 +302,6 @@ function renderHistory(){
     histList.appendChild(d);
   });
 }
-
 function evalExpression(expr){
   expr=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/,/g,'.').trim();
   if(!/^[0-9+\-*/().%\s]*$/.test(expr))throw new Error('Expressão inválida');
@@ -284,18 +319,18 @@ function addToSelected(){
   pushHistory({typeLabel:label,expr:`${raw} = ${formatMoney(val)}`,note:`Adicionado → Total: ${formatMoney(totals[selected])}`});
   entrada.value='';updateTotalsUI();
 }
-function calcOnly(){const raw=entrada.value.trim();if(!raw){alert('Digite algo.');return;}
-  try{alert('Resultado: '+formatMoney(evalExpression(raw)));}catch(e){alert(e.message);} }
+function calcOnly(){
+  const raw=entrada.value.trim();if(!raw){alert('Digite algo.');return;}
+  try{alert('Resultado: '+formatMoney(evalExpression(raw)));}catch(e){alert(e.message);}
+}
 function selectType(t){selected=(selected===t)?null:t;updateTotalsUI();}
 function clearHistory(){if(confirm('Limpar histórico?')){history=[];renderHistory();}}
 function clearType(t){if(confirm('Limpar total de '+t+'?')){totals[t]=0;updateTotalsUI();}}
-
-function showResultsPopup() {
-  popupResultsList.innerHTML = `
+function showResultsPopup(){
+  popupResultsList.innerHTML=`
     <div class="popup-result-item"><span class="popup-result-label">Dinheiro:</span><span class="popup-result-value">${formatMoney(totals.din)}</span></div>
     <div class="popup-result-item"><span class="popup-result-label">Crédito:</span><span class="popup-result-value">${formatMoney(totals.cred)}</span></div>
-    <div class="popup-result-item"><span class="popup-result-label">Débito:</span><span class="popup-result-value">${formatMoney(totals.deb)}</span></div>
-  `;
+    <div class="popup-result-item"><span class="popup-result-label">Débito:</span><span class="popup-result-value">${formatMoney(totals.deb)}</span></div>`;
   resultsPopup.classList.add('show');
   closePopupBtn.focus();
 }
@@ -309,19 +344,12 @@ chkCred.onchange=()=>selectType(chkCred.checked?'cred':null);
 chkDeb.onchange=()=>selectType(chkDeb.checked?'deb':null);
 document.getElementById('btnAdd').onclick=addToSelected;
 document.getElementById('btnCalc').onclick=calcOnly;
-btnResults.onclick = showResultsPopup;
-closePopupBtn.onclick = hideResultsPopup;
-
-/* ======== NOVO: BLOQUEAR DUPLICAÇÃO DE SINAIS ======== */
-entrada.addEventListener('input', ()=>{
-  entrada.value = entrada.value
-    .replace(/([+\-*/%])\1+/g, '$1')
-    .replace(/,{2,}/g, ',');
-});
+btnResults.onclick=showResultsPopup;
+closePopupBtn.onclick=hideResultsPopup;
 
 document.addEventListener('keydown',e=>{
-  if (resultsPopup.classList.contains('show')) {
-    if (e.key === 'Escape' || e.key === 'Enter') {e.preventDefault();hideResultsPopup();return;}
+  if(resultsPopup.classList.contains('show')){
+    if(e.key==='Escape'||e.key==='Enter'){e.preventDefault();hideResultsPopup();return;}
   }
   const allowed='0123456789+-*/().,%';
   if(['F2','F3','F4'].includes(e.key)){e.preventDefault();
@@ -332,7 +360,7 @@ document.addEventListener('keydown',e=>{
     if(e.key==='F5')clearType('din');
     if(e.key==='F6')clearType('cred');
     if(e.key==='F7')clearType('deb');return;}
-  if (e.key === 'F10'){e.preventDefault();showResultsPopup();return;}
+  if(e.key==='F10'){e.preventDefault();showResultsPopup();return;}
   if(e.key==='Enter'){e.preventDefault();if(e.ctrlKey)calcOnly();else addToSelected();return;}
   if(e.key==='Escape'){entrada.value='';return;}
   if(e.ctrlKey&&e.key.toLowerCase()==='l'){e.preventDefault();clearHistory();return;}
@@ -341,9 +369,22 @@ document.addEventListener('keydown',e=>{
   if(allowed.includes(e.key)&&document.activeElement!==entrada){entrada.value+=e.key;e.preventDefault();return;}
 });
 renderHistory();updateTotalsUI();entrada.focus();
-entrada.addEventListener('paste',ev=>{
+
+// 🔒 BLOQUEIO DE OPERADORES DUPLICADOS
+entrada.addEventListener('input', () => {
+  entrada.value = entrada.value
+    .replace(/([+\-*/%]){2,}/g, '$1')
+    .replace(/,{2,}/g, ',')
+    .replace(/([.,]){2,}/g, '$1')
+    .replace(/^[+\-*/%]/, '');
+});
+entrada.addEventListener('paste', ev=>{
   ev.preventDefault();
-  entrada.value+=(ev.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,'').replace(/\./g,',');
+  entrada.value += (ev.clipboardData||window.clipboardData)
+    .getData('text')
+    .replace(/\s+/g,'')
+    .replace(/\./g,',')
+    .replace(/([+\-*/%]){2,}/g,'$1');
 });
 </script>
 </body>
